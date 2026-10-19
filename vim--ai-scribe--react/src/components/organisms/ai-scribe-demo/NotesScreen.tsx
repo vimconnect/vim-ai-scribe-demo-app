@@ -179,7 +179,7 @@ export const NotesScreen = ({
       if (granted !== "granted") throw new Error("encounter writeback denied");
     }
 
-    return encounter.update(payload, { mode: "merge" });
+    return encounter.update(payload);
   };
 
   const showError = (message: string) => {

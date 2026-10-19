@@ -56,8 +56,7 @@ export const useUpdateEncounterSubscription = <S extends EncounterSection>(
 
       try {
         const result = await encounter.update(
-          { [sectionName]: { [targetField]: content } } as Partial<Encounter>,
-          { mode: "merge" }
+          { [sectionName]: { [targetField]: content } } as Partial<Encounter>
         );
         // success with no updatedFields means the EHR already held this value.
         console.log({
