@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Mic, ClipboardList, User, ChevronDown, Send, CheckCircle2, X, AlertCircle, Copy, ChevronUp } from "lucide-react";
 import { ScreenHeader } from "./ScreenHeader";
 import { useNoteFormContext } from "@/providers/NoteFormContext";
-import { useVimOsContext } from "@/providers/VimOSContext";
+import { useVimSdkContext } from "@/providers/VimSdkContext";
 import type { Encounter } from "@vimconnect/app-sdk";
 
 // EHR field options shown in the mapping dropdown (ICD/CPT handled separately)
@@ -73,7 +73,7 @@ interface NotesScreenProps {
 export const NotesScreen = ({
   onTabChange,
 }: NotesScreenProps) => {
-  const vimOS = useVimOsContext();
+  const vimSdk = useVimSdkContext();
   const { watch, register } = useNoteFormContext();
   const currentNote = watch();
   const [pushedCodes, setPushedCodes] = useState<Set<string>>(new Set());
@@ -101,29 +101,27 @@ export const NotesScreen = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pushOptionsRef = useRef<HTMLDivElement>(null);
 
-  // Available EHR fields — filtered by canUpdateEncounter, fall back to all
+  // Available EHR fields — every option while the encounter is updatable
   const [availableFields, setAvailableFields] = useState<EhrFieldOption[]>(ALL_EHR_OPTIONS);
   const [canPushIcd, setCanPushIcd] = useState(false);
   const [canPushCpt, setCanPushCpt] = useState(false);
 
-  // Legacy canUpdateEncounter returned a per-field writability map, which filtered this
-  // list. app-sdk's ContextWriteback exposes availability per ENTITY only, so every mapped
-  // field is offered whenever the encounter is updatable — the same degrade the legacy code
-  // already fell back to when nothing reported writable.
+  // app-sdk's ContextWriteback reports availability per ENTITY only, so every mapped
+  // field is offered whenever the encounter is updatable.
   useEffect(
     () =>
-      vimOS.ehr.context.getUpdatableEntities((entities) => {
+      vimSdk.ehr.context.getUpdatableEntities((entities) => {
         const encounterUpdatable = Boolean(entities.encounter);
         setAvailableFields(ALL_EHR_OPTIONS);
         setCanPushIcd(encounterUpdatable);
         setCanPushCpt(encounterUpdatable);
       }),
-    [vimOS]
+    [vimSdk]
   );
 
   useEffect(
     () =>
-      vimOS.ehr.context.onChange(
+      vimSdk.ehr.context.onChange(
         "encounter_open:encounter",
         (_previous, encounter) => {
           setHasEncounter(!!encounter);
@@ -132,7 +130,7 @@ export const NotesScreen = ({
           setEhrDiagnosisCodes(new Set(codes.filter(Boolean) as string[]));
         }
       ),
-    [vimOS]
+    [vimSdk]
   );
 
   useEffect(() => {
@@ -164,7 +162,7 @@ export const NotesScreen = ({
 
   /** Writes must clear the capability and permission gates before update() is called. */
   const pushEncounter = async (payload: UpdateParams) => {
-    const encounter = vimOS.ehr.context.encounter;
+    const encounter = vimSdk.ehr.context.encounter;
 
     const capability = encounter.getCapability("update");
     if (!capability.available) {

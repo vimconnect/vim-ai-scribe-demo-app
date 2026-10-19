@@ -2,7 +2,7 @@ import { useForm, UseFormReturn } from "react-hook-form";
 import { createContext, useContext } from "react";
 
 export interface NoteFormData {
-  // Legacy fields (used for hasCurrentNote check)
+  // Section-level fields (used for hasCurrentNote check)
   subjective: string;
   objective: string;
   assessment: string;

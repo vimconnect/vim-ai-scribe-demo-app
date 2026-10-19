@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useController } from "react-hook-form";
 import { Copy, Edit2, Save } from "lucide-react";
 import { useNoteFormContext } from "@/providers/NoteFormContext";
-import { copyToClipboardUnsupported } from "@/vimOs/unsupported";
-import { useVimOsContext } from "@/providers/VimOSContext";
+import { copyToClipboardUnsupported } from "@/vimSdk/unsupported";
+import { useVimSdkContext } from "@/providers/VimSdkContext";
 import { Button } from "../atoms/Button";
 import { IconButton } from "../atoms/IconButton";
 import { Textarea } from "../atoms/Textarea";
@@ -32,7 +32,7 @@ export const SoapSection = ({
   onPushToEHR = () => {},
   renderHighlightedText,
 }: SoapSectionProps) => {
-  const vimOS = useVimOsContext();
+  const vimSdk = useVimSdkContext();
   const { control } = useNoteFormContext();
   const {
     field: { value, onChange },
@@ -55,7 +55,7 @@ export const SoapSection = ({
     copyToClipboardUnsupported(value);
 
     try {
-      vimOS.hub.pushNotification.show({
+      vimSdk.hub.pushNotification.show({
         text: `${title} copied to clipboard!`,
         notificationId: crypto.randomUUID(),
       });

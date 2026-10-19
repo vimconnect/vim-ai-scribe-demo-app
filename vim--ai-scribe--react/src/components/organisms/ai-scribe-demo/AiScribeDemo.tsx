@@ -1,5 +1,5 @@
 import { useNoteFormContext } from "@/providers/NoteFormContext";
-import { setDynamicAppSizeUnsupported } from "@/vimOs/unsupported";
+import { setDynamicAppSizeUnsupported } from "@/vimSdk/unsupported";
 import { useState } from "react";
 import { NotesScreen } from "./NotesScreen";
 import { RecordingScreen } from "./RecordingScreen";
@@ -7,11 +7,11 @@ import { WelcomeScreen } from "./WelcomeScreen";
 import { PreviousNotesScreen } from "./PreviousNotesScreen";
 import type { Note } from "./Note.interface";
 import { TranscribingScreen } from "./TranscribingScreen";
-import { usePatientName } from "../../../vimOs/usePatientName";
+import { usePatientName } from "../../../vimSdk/usePatientName";
 import { useRecorder } from "./useRecorder";
 
 const RECORDING_RESULT = {
-  // Legacy fields
+  // Section-level fields
   subjective:
     "Patient reports experiencing colic pain on both sides of the lower abdomen for the past two days. The pain is intermittent, sharp, and cramping in nature, rated 6/10 in intensity.",
   objective:

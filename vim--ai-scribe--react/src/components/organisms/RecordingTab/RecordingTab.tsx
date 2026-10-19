@@ -1,6 +1,6 @@
 import { Mic, User } from "lucide-react";
 import { Button } from "../../atoms/Button";
-import { useProviderName } from "@/vimOs/useProviderName";
+import { useProviderName } from "@/vimSdk/useProviderName";
 
 export const RecordingTab = ({
   patientName,

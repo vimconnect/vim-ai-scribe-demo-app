@@ -1,6 +1,5 @@
 /**
- * GAP — not migrated. The legacy SDK exposed the signed-in user's name at
- * `sessionContext.user.demographics`. The Vim Connect `sessionContext` carries only
+ * GAP — the signed-in user's name is not available. The Vim Connect `sessionContext` carries only
  * `sessionId`, `deviceId`, `userId` (a UUID), `account` and `ehrType` — there is no name.
  *
  * `ehr.api.provider.getById()` and `encounter.provider` give the EHR provider on the

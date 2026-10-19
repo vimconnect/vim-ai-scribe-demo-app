@@ -1,4 +1,4 @@
-import { useUpdateEncounterSubscription } from "@/vimOs/useUpdateEncounter";
+import { useUpdateEncounterSubscription } from "@/vimSdk/useUpdateEncounter";
 import { useNoteFormContext } from "@/providers/NoteFormContext";
 
 export const useUpdateSubjective = () => {

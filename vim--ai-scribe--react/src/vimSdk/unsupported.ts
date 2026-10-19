@@ -1,15 +1,15 @@
 /**
- * Legacy Vim OS SDK capabilities with no counterpart on Vim Connect.
+ * App behaviors with no counterpart on Vim Connect.
  *
  * These are deliberately no-ops rather than substitutes: each needs a product decision, and
- * a plausible-looking replacement would hide that decision inside the migration. Delete a
- * function here once its question is answered, and fix its call sites then.
+ * a plausible-looking replacement would hide that decision. Delete a function here once its
+ * question is answered, and fix its call sites then.
  */
 
 /**
- * `vimOS.hub.setDynamicAppSize(size)`.
+ * Resizing the app at run time.
  *
- * Absent from Vim Connect's hub. In the side panel the provider chooses the width and
+ * Vim Connect's hub has no resize call. In the side panel the provider chooses the width and
  * Chrome remembers it per install, so an app cannot resize itself.
  *
  * QUESTION: does this app need run-time sizing, or is the manifest size acceptable?
@@ -19,7 +19,7 @@ export function setDynamicAppSizeUnsupported(_size: "CLASSIC" | "LARGE"): void {
 }
 
 /**
- * `vimOS.utils.copyToClipboard(text)`.
+ * Copying text through the Hub.
  *
  * There is no `utils` namespace on Vim Connect.
  *

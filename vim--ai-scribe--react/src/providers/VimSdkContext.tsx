@@ -9,16 +9,16 @@ import {
 } from "react";
 import { initVimSDK, type VimSDK } from "@vimconnect/app-sdk";
 
-export const VimOSContext = createContext<VimSDK>({} as VimSDK);
+export const VimSdkContext = createContext<VimSDK>({} as VimSDK);
 
-export const useVimOsContext = () => {
-  return useContext(VimOSContext);
+export const useVimSdkContext = () => {
+  return useContext(VimSdkContext);
 };
 
-export const VimOSContextProvider: FC<{ children: ReactNode }> = ({
+export const VimSdkProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [vimOS, setVimOS] = useState<VimSDK | undefined>(undefined);
+  const [vimSdk, setVimSdk] = useState<VimSDK | undefined>(undefined);
   const [error, setError] = useState<Error | undefined>(undefined);
   const disposed = useRef(false);
 
@@ -26,7 +26,7 @@ export const VimOSContextProvider: FC<{ children: ReactNode }> = ({
     disposed.current = false;
     initVimSDK()
       .then((sdk) => {
-        if (!disposed.current) setVimOS(sdk);
+        if (!disposed.current) setVimSdk(sdk);
       })
       .catch((initError: unknown) => {
         if (disposed.current) return;
@@ -43,11 +43,11 @@ export const VimOSContextProvider: FC<{ children: ReactNode }> = ({
     return <div role="alert">Vim SDK failed to load: {error.message}</div>;
   }
 
-  if (!vimOS) {
+  if (!vimSdk) {
     return <div>Loading VimSDK...</div>;
   }
 
   return (
-    <VimOSContext.Provider value={vimOS}>{children}</VimOSContext.Provider>
+    <VimSdkContext.Provider value={vimSdk}>{children}</VimSdkContext.Provider>
   );
 };

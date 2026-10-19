@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Encounter } from "@vimconnect/app-sdk";
-import { useVimOsContext } from "@/providers/VimOSContext";
+import { useVimSdkContext } from "@/providers/VimSdkContext";
 
 /** Encounter sections this app writes. Each field verified against the collection. */
 export type EncounterSection = "subjective" | "objective" | "assessment" | "plan";
@@ -8,29 +8,27 @@ export type EncounterSection = "subjective" | "objective" | "assessment" | "plan
 type SectionField<S extends EncounterSection> = keyof NonNullable<Encounter[S]>;
 
 /**
- * Legacy `canUpdateEncounter({ section: { field: true } })` returned a nested map saying
- * which fields were writable, and the UI picked the first writable one from a priority
- * list. `@vimconnect/app-sdk` types `ehr.context.encounter` as `ContextWriteback`, whose
+ * `@vimconnect/app-sdk` types `ehr.context.encounter` as `ContextWriteback`, whose
  * `getCapability('update')` takes no field argument — availability is per entity, not per
- * field. So the priority list now only chooses which field to WRITE, not whether the
+ * field. So the priority list only chooses which field to WRITE, not whether the
  * section is writable at all.
  *
- * Field-scoped capability does exist on core-sdk's `ContextWritebackNamespace`; it is not
+ * Field-scoped capability exists on core-sdk's `ContextWritebackNamespace`; it is not
  * reachable through app-sdk's exported types in 0.4.58. Revisit if that changes.
  */
 export const useUpdateEncounterSubscription = <S extends EncounterSection>(
   sectionName: S,
   priorityList: Array<SectionField<S>>
 ) => {
-  const vimOS = useVimOsContext();
+  const vimSdk = useVimSdkContext();
   const [canUpdate, setCanUpdate] = useState(false);
 
   useEffect(
     () =>
-      vimOS.ehr.context.getUpdatableEntities((entities) =>
+      vimSdk.ehr.context.getUpdatableEntities((entities) =>
         setCanUpdate(Boolean(entities.encounter))
       ),
-    [vimOS]
+    [vimSdk]
   );
 
   const targetField = priorityList[0];
@@ -39,7 +37,7 @@ export const useUpdateEncounterSubscription = <S extends EncounterSection>(
     async (content: string) => {
       if (!targetField || !canUpdate) return;
 
-      const encounter = vimOS.ehr.context.encounter;
+      const encounter = vimSdk.ehr.context.encounter;
       const fieldPath = `${sectionName}.${String(targetField)}`;
 
       const capability = encounter.getCapability("update");
@@ -76,7 +74,7 @@ export const useUpdateEncounterSubscription = <S extends EncounterSection>(
         });
       }
     },
-    [canUpdate, sectionName, targetField, vimOS]
+    [canUpdate, sectionName, targetField, vimSdk]
   );
 
   return useMemo(

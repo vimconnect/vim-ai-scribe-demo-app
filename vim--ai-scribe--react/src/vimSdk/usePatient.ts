@@ -1,4 +1,4 @@
-import { useVimOsContext } from "@/providers/VimOSContext";
+import { useVimSdkContext } from "@/providers/VimSdkContext";
 import type { Patient } from "@vimconnect/app-sdk";
 import { useEffect, useState } from "react";
 
@@ -68,7 +68,7 @@ const withoutUndefined = (value: Record<string, unknown>) =>
  * every field on it is optional because the EHR supplies only what it has.
  */
 export function usePatient(): Partial<Patient> | undefined {
-  const vimOS = useVimOsContext();
+  const vimSdk = useVimSdkContext();
   const [held, setHeld] = useState<HeldPatient>();
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export function usePatient(): Partial<Patient> | undefined {
 
     const fillFromApi = async (requested: HeldPatient) => {
       try {
-        const response = await vimOS.ehr.api.patient.getPatient();
+        const response = await vimSdk.ehr.api.patient.getPatient();
         if (disposed || !response.success) return;
         // Applied only if no other patient arrived while the call was in flight.
         setHeld((previous) =>
@@ -110,14 +110,14 @@ export function usePatient(): Partial<Patient> | undefined {
     const unsubscribers: Array<() => void> = (
       ["chart_open:patient", "encounter_open:patient"] as const
     ).map((key) =>
-      vimOS.ehr.context.onChange(key, (_previous, current) => apply(key, current))
+      vimSdk.ehr.context.onChange(key, (_previous, current) => apply(key, current))
     );
 
     return () => {
       disposed = true;
       unsubscribers.forEach((unsubscribe) => unsubscribe());
     };
-  }, [vimOS]);
+  }, [vimSdk]);
 
   return held?.fields;
 }

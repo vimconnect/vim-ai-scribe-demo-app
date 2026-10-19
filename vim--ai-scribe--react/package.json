@@ -1,7 +1,28 @@
 {
-  "name": "vim--ai-scribe-app",
+  "name": "vim-ai-scribe-demo-app",
   "private": true,
   "version": "0.0.0",
+  "description": "AI Scribe demo app for the Vim Connect App SDK — records the visit and writes the note back to the EHR encounter",
+  "license": "MIT",
+  "homepage": "https://developer-docs.getvim.ai/docs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vimconnect/vim-ai-scribe-demo-app.git",
+    "directory": "vim--ai-scribe--react"
+  },
+  "keywords": [
+    "vim-connect",
+    "vim-app-sdk",
+    "sdk",
+    "demo",
+    "ai-scribe",
+    "react",
+    "vite",
+    "cloudflare-pages",
+    "healthcare",
+    "ehr",
+    "ehr-integration"
+  ],
   "type": "module",
   "scripts": {
     "dev:vite": "vite",

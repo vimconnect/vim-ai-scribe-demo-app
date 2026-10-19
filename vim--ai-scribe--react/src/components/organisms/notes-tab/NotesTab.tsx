@@ -1,5 +1,5 @@
 import { useNoteFormContext } from "@/providers/NoteFormContext";
-import { setDynamicAppSizeUnsupported } from "@/vimOs/unsupported";
+import { setDynamicAppSizeUnsupported } from "@/vimSdk/unsupported";
 import { useState } from "react";
 import { Button } from "../../atoms/Button";
 import { DebugView } from "../../templates/DebugView";

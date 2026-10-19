@@ -1,6 +1,6 @@
 import { UserCircle } from "lucide-react";
-import { usePatientName } from "@/vimOs/usePatientName";
-import { usePatientDob, formatDob, calculateAge } from "@/vimOs/usePatientDob";
+import { usePatientName } from "@/vimSdk/usePatientName";
+import { usePatientDob, formatDob, calculateAge } from "@/vimSdk/usePatientDob";
 
 const imgDemoMic = "https://static.getvim.com/prod/vim-os-appstore/apps/icons/e1e2a9c2-b502-43ee-8501-52fed01c275a.svg";
 import imgMicSelectIcon from "@/assets/icon-mic-select.svg";

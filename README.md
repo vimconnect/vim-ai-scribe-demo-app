@@ -1,117 +1,121 @@
-# Vim AI Scribe App
+# Vim AI Scribe Demo App
 
-![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white) ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
- ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Radix UI](https://img.shields.io/badge/radix%20ui-161618.svg?style=for-the-badge&logo=radix-ui&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+[![npm version](https://img.shields.io/npm/v/@vimconnect/app-sdk.svg)](https://www.npmjs.com/package/@vimconnect/app-sdk)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-<img src='https://static.getvim.com/img/vim-canvas-landing.png?v=2' width='100%' >
+An AI scribe built on the [Vim Connect App SDK](https://developer-docs.getvim.ai/docs). The provider starts a visit from the Vim Hub, the app records through the microphone, and the resulting SOAP note, ICD-10 diagnoses, and CPT codes are written back to the open encounter in the EHR. Built with React + Vite, with [Cloudflare Pages Functions](https://developers.cloudflare.com/pages/functions/) for the OAuth endpoints.
 
-## Quick Links
+The transcription is simulated: the app captures the microphone to show the recording flow, but no audio leaves the browser, and every visit produces the same sample note. Swap in your own speech-to-text and note generation to make it real.
 
-* [Vim Canvas™️ Developer Platform](https://getvim.com/vim-canvas-developer-platform/)
-* [Vim Canvas™️ Docs](https://docs.getvim.com/)
-* [VimOS.js Canvas™️ SDK](https://www.npmjs.com/package/vim-os-js-browser)
+Use [vim-demo-app](https://github.com/vimconnect/vim-demo-app) for the full SDK surface. Use this one when you are building a documentation or ambient-listening app and want to see microphone access, the microphone badge, and encounter writeback end to end.
 
-## What is Vim Canvas™️?
-Vim is the middleware platform for healthcare. Vim Canvas™️ is a self-service platform that empowers application developers to embed their application into Electronic Health Record (EHR) workflows, resulting in a streamlined and low-friction experience for end users. With Vim, you can deploy your applications on top of Vim Connect - Vim's in-EHR connectivity layer - accelerating time to market at reduced cost and improved flexibility.
-
-# Repo Overview 😎
-<!-- 
-This repo contains example projects for building applications on top of Vim Canvas™️.
-The applications in different frameworks demonstrates how to use the VimOS.js Canvas™️ SDK to interact with the Vim Canvas™️ platform. The app showcases the following features:
-
-* Authentication with Vim Canvas™️
-* Embedding an application into the Vim Canvas™️ platform
-* Viewing EHR entities, including
-  * Patients
-  * Encounters
-  * Referrals
-  * Orders
-* Updating EHR entities, including
-  * Encounters
-  * Referrals -->
-
-## Vim AI Scribe App (React)
-
-Under the `vim--ai-scribe--react` we have a project that uses cloudflare pages to host the Vim Canvas™️ Demo App built with React & also the serverless service needed for the authentication flow.
-
-The app is built with `vite` and `react` and uses `shadcn`, `radix-ui`,`tailwindcss` for the UI components.
-
-### Folder Structure
-
-* `functions` - Contains [cloudflare pages functions](https://developers.cloudflare.com/pages/functions/) for the authentication flow.
-* `src/components/ui` - Contains UI components generated with [Shadcn](https://ui.shadcn.com/).
-* `src/hooks` - Contains custom hooks for the application, including hooks that wrap the VimOS.js Canvas™️ SDK - [following the docs examples](https://docs.getvim.com/vim-os-js/reactjs.html#react-integration-guide-for-vimos.js).
-
-### Running the example code
-
-#### Prerequisites
-In order to see the demo code in action, you must first configure an application in the [Vim Canvas™️ Developer Platform](https://console.getvim.com/organization-admin/).
-
-If you don’t have a Vim Canvas™️ developer account yet, register [here](https://getvim.com/vim-canvas-developer-platform/) to gain access.
-
-> ❕ **You don't need a cloudflare user / account** to run the app locally.
-
-#### Installation
-
-To install and run the app locally, follow these steps:
-
-1. Clone the repository:
+## Quick Start
 
 ```bash
-git clone https://github.com/getvim/vim-canvas-demo-app.git
-```
+# 1. Clone
+git clone https://github.com/vimconnect/vim-ai-scribe-demo-app.git
+cd vim-ai-scribe-demo-app/vim--ai-scribe--react
 
-2. Navigate to the project directory:
-
-```bash
-cd vim-canvas-demo-app-react
-```
-
-3. Install the dependencies:
-
-```bash
+# 2. Install
 npm install
-```
 
-4. Create a `.dev.vars` file with the following content:
-
-```.env
-CLIENT_ID=<<YOU ACCOUNT CLIENT ID>>
-CLIENT_SECRET=<<YOUR ACCOUNT CLIENT SECRET>>
+# 3. Configure
+cat > .dev.vars <<'EOF'
+CLIENT_ID=<your client ID>
+CLIENT_SECRET=<your client secret>
 REDIRECT_URL=http://localhost:8788
-```
+EOF
 
-5. Start the development server:
-
-```bash
+# 4. Run
 npm run dev
 ```
 
-> This will start both the backend at `http://localhost:8788` and the frontend at `http://localhost:3000`. <br>
-The backend will proxy the frontend - **making both API & frontend available at `http://localhost:8788`**.
+App runs at [http://localhost:8788](http://localhost:8788). `npm run dev` starts Vite on port 5173 and Wrangler on port 8788; Wrangler serves the `/api/*` functions and proxies everything else to Vite, so use port 8788 everywhere.
 
-6. Follow up on [Testing Your Application](https://docs.getvim.com/testing/creating-application.html#create-your-canvas-application) in the official docs
+You don't need a Cloudflare account to run the app locally.
 
-### Authentication Flow
+## Prerequisites
 
-The `functions` folder is a cloudflare pages function that handles the authentication flow for the app.
+- **Node.js** 20 (see [`.nvmrc`](.nvmrc))
+- **Vim Connect Chrome extension** installed ([setup guide](https://developer-docs.getvim.ai/docs/getting-started#prerequisites))
+- **Vim Connect account** with an app created in the Vim Console
+- **OAuth credentials** (client ID + client secret) from the [Vim Console](https://developer-docs.getvim.ai/docs/developer-account#getting-your-client-id-and-secret)
+- **A microphone**, and an EHR encounter to write the note into (the Sandbox EHR works)
 
-When running locally the api server starts at `http://localhost:8788` & exposes the following endpoints:
-* `/api/launch` - This endpoint is used to initiate the authentication flow.
-* `/api/token` - This endpoint is used to handle the callback from the Vim Canvas™️ platform to create a token.
+## Environment Variables
 
-# Vim Canvas™️ Pricing
+Set these in `vim--ai-scribe--react/.dev.vars` (git-ignored). Wrangler loads them into the functions.
 
-| Starter Access | Patient-Based | User-Based |
-| --- | --- | --- |
-| **Design and test your application before choosing a plan.** | **Active Member Pricing (AMP) Billed Based on Per Member Per Month (PMPM)** | **Per User Per Month (PUPM)** |
-| *Who is this right for?* | *Who is this right for?* | *Who is this right for?* |
-| - Access to developer platform<br>- Ability to build application using Vim workflows<br>- Design and testing only. Activation and distribution of application requires a package | - Patient-based pricing model in use or applicable to workflow<br>- Application is enabled based on patient in context in the EHR<br>- Allows for unlimited clinic-level users | - User-based pricing model in use or applicable to application<br>- Application is always available and is not specific to patients<br>- Based on number of users/year for which the application is enabled |
-| | Example:<br>A mental health referral solution | Example:<br>An efficiency solution such as a medical documentation tool |
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `CLIENT_ID` | Yes | Your OAuth client ID |
+| `CLIENT_SECRET` | Yes | Your OAuth client secret (server-side only) |
+| `REDIRECT_URL` | No | Where Vim returns the provider after authorization. Defaults to `http://localhost:8788`; must be listed in the manifest's **Allowed iframe URLs** |
+| `VIM_AUTHORIZE_ENDPOINT` | No | Overrides the authorize URL (default `https://api.getvim.ai/app-auth/authorize`) |
+| `VIM_TOKEN_ENDPOINT` | No | Overrides the token URL (default `https://api.getvim.ai/app-auth/token`) |
+| `VIM_ISSUER` | No | Expected `iss` of the ID token (default `https://connect.getvim.ai`) |
+| `VIM_JWKS_URL` | No | Where the ID token's signing keys are fetched (default `https://api.getvim.ai/app-auth/.well-known/jwks.json`) |
+| `CLIENT_SECRET_FALLBACK` | No | A second secret tried when the first is rejected, for rotating secrets without downtime |
 
-# Contributing
-* How can I submit an improvement?
-    * Improvements are always welcomed! 🥳 Open a PR with a proper description and we'll review it as soon as possible
-* Spot a bug 🕷 ?
-    * We welcome code changes that improve the apps or fix a problem. Please make sure to follow all best practices and open an "Issue" and we'll review it as soon as possible.
+To switch between credential sets, keep them in `.dev.vars-local` and `.dev.vars-prod` and run `npm run dev:local` or `npm run dev:prod`; each copies its file over `.dev.vars` before starting.
+
+## Vim Console Setup
+
+In your app's manifest (or a local environment override):
+
+| Field | Value for local development |
+|-------|-----------------------------|
+| **Launch Endpoint** | `http://localhost:8788/api/launch` |
+| **Token Endpoint** | `http://localhost:8788/api/token` |
+| **Allowed iframe URLs** | `http://localhost:8788` |
+
+On the **App UX** tab, enable **Allow Microphone** and **Push Notification**. Without **Allow Microphone**, `getUserMedia` fails with `NotAllowedError` before any prompt appears. On the **EHR** tab, declare the patient's name and date of birth, the encounter's diagnoses, and update access to the encounter sections the note is written to. See [Filling in the manifest](https://developer-docs.getvim.ai/docs/developer-account#filling-in-the-manifest) and [Microphone and Camera](https://developer-docs.getvim.ai/docs/vim-hub#microphone-and-camera).
+
+## What This Demo Shows
+
+- **OAuth 2.0 flow** — `/api/launch` redirects to Vim's authorize endpoint; `/api/token` exchanges the code server-side and verifies the ID token against Vim's JWKS
+- **SDK initialization** — `initVimSDK()` with a configured token endpoint, so the SDK fetches its own access token
+- **Patient context** — The patient's name and age from `chart_open:patient` and `encounter_open:patient`, held across the chart-to-encounter transition
+- **Microphone access** — `getUserMedia` inside the Hub, the microphone badge while recording, and `hub.consumeGrantedDevices()` to resume the recording after the provider allows the microphone for the first time
+- **Encounter writeback** — Map each note section to an encounter field, then write the note, ICD-10 diagnoses, and CPT procedure codes with `encounter.update()` after the capability and permission checks
+- **Hub controls** — Activation status and a push notification on launch
+
+## Project Structure
+
+```
+vim--ai-scribe--react/
+├── functions/api/
+│   ├── launch.ts               # Launch endpoint (redirects to Vim authorize)
+│   └── token.ts                # Token endpoint (code exchange + ID token check)
+└── src/
+    ├── providers/              # SDK initialization and the note form
+    ├── vimSdk/                 # SDK hooks: patient, encounter writeback
+    └── components/organisms/ai-scribe-demo/
+        ├── AiScribeDemo.tsx    # Screen flow: welcome, recording, transcribing, notes
+        ├── useRecorder.ts      # Microphone capture and the microphone badge
+        └── NotesScreen.tsx     # Field mapping and push to EHR
+```
+
+## Documentation
+
+- [Vim Connect App SDK Documentation](https://developer-docs.getvim.ai/docs)
+- [`@vimconnect/app-sdk` on npm](https://www.npmjs.com/package/@vimconnect/app-sdk)
+- [OAuth Integration Guide](https://developer-docs.getvim.ai/docs/authentication)
+- [Vim Hub](https://developer-docs.getvim.ai/docs/vim-hub) — microphone access and the microphone badge
+- [EHR Support Matrix](https://developer-docs.getvim.ai/docs/ehr-support)
+
+## Scripts
+
+Run from `vim--ai-scribe--react/`.
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Vite (port 5173) and the Wrangler functions proxy (port 8788) |
+| `npm run dev:local` / `npm run dev:prod` | Copy `.dev.vars-local` / `.dev.vars-prod` to `.dev.vars`, then start |
+| `npm run build` | Type-check and build for production |
+| `npm test` | Run the unit tests (Vitest) |
+| `npm run lint` | Run ESLint |
+
+## License
+
+[MIT](LICENSE)

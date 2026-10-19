@@ -46,7 +46,7 @@ export const RecordingPanel = ({
       </Button>
 
       <a
-        href="https://docs.getvim.com/"
+        href="https://developer-docs.getvim.ai/docs"
         className="text-green-600 hover:text-green-800 underline mt-4"
       >
         How do I tell my patient about AI Scribe?

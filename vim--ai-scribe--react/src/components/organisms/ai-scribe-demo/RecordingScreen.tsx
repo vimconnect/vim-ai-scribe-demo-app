@@ -101,7 +101,7 @@ export const RecordingScreen = ({
 
         {/* Link */}
         <a
-          href="https://docs.getvim.com/"
+          href="https://developer-docs.getvim.ai/docs"
           target="_blank"
           rel="noreferrer"
           className="text-[#001c36] text-[14px] underline mt-1"

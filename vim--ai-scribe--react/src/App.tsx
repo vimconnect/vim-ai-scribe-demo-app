@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { useVimOsContext } from "./providers/VimOSContext";
+import { useVimSdkContext } from "./providers/VimSdkContext";
 import { AiScribeDemo } from "./components/organisms/ai-scribe-demo/AiScribeDemo";
 import "globals";
 
 const useExploreNotification = () => {
-  const vimOs = useVimOsContext();
+  const vimSdk = useVimSdkContext();
 
   useEffect(() => {
     try {
-      vimOs.hub.pushNotification.show({
+      vimSdk.hub.pushNotification.show({
         text: `Explore the <b>Vim AI Scribe Demo</b> app to view SDK capabilities, grab app code, and unlock opportunities`,
         notificationId: crypto.randomUUID(),
         actionButtons: {
@@ -23,15 +23,15 @@ const useExploreNotification = () => {
     } catch (e) {
       console.error("failed to show push notification", e);
     }
-  }, [vimOs.hub.pushNotification]);
+  }, [vimSdk.hub.pushNotification]);
 };
 
 const useSetAppEnabled = () => {
-  const vimOs = useVimOsContext();
+  const vimSdk = useVimSdkContext();
 
   useEffect(() => {
-    vimOs.hub.setActivationStatus("ENABLED");
-  }, [vimOs]);
+    vimSdk.hub.setActivationStatus("ENABLED");
+  }, [vimSdk]);
 };
 
 export const App = () => {
